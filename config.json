@@ -1,3 +1,53 @@
 {
-  "name": "@vcmap/event-control"
+  "name": "@vcmap/event-control",
+  "actions": [
+    {
+      "type": "layer",
+      "targetName": "testGeojson",
+      "onActivate": [
+        {
+          "type": "ActivateLayersCallback",
+          "layerNames": ["testGeojsonVectorTile"]
+        }
+      ],
+      "onDeactivate": [
+        {
+          "type": "DeactivateLayersCallback",
+          "layerNames": ["testGeojsonVectorTile"]
+        }
+      ]
+    },
+    {
+      "type": "map",
+      "targetName": "cesium",
+      "onActivate": [
+        {
+          "type": "ToggleNavbarButtonCallback",
+          "buttonId": "Content",
+          "activeState": true
+        }
+      ]
+    },
+    {
+      "type": "planning",
+      "targetName": "GL9hMRzn8TenNoyGe",
+      "onDeactivate": [
+        {
+          "type": "DeactivateLayersCallback",
+          "layerNames": ["Berlin untexturiert openData (pbr recalculation)"]
+        }
+      ]
+    },
+    {
+      "type": "window",
+      "targetName": "legendId",
+      "onDeactivate": [
+        {
+          "type": "ToggleNavbarButtonCallback",
+          "buttonId": "Content",
+          "activeState": true
+        }
+      ]
+    }
+  ]
 }
