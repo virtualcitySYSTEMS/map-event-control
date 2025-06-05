@@ -61,7 +61,7 @@ For more information about callbacks, see the [Callback documentation](https://g
         {
           "type": "ActivateLayersCallback",
           "layerNames": ["planningLayer"]
-        },
+        }
       ]
     }
 ]
