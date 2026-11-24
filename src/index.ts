@@ -1,30 +1,18 @@
 import type { VcsMap } from '@vcmap/core';
 import { LayerState, MapState } from '@vcmap/core';
-import type {
-  VcsPlugin,
-  VcsUiApp,
-  PluginConfigEditor,
-  VcsCallbackOptions,
-} from '@vcmap/ui';
-import { executeCallbacks } from '@vcmap/ui';
+import type { VcsPlugin, VcsUiApp, PluginConfigEditor } from '@vcmap/ui';
+import safeExecuteCallbacks from './safeExecuteCallbacks.js';
 import { name, version, mapVersion } from '../package.json';
+import type { Action, EventControlConfig } from './types.js';
+import { EventType } from './types.js';
+import EventControlConfigEditor from './EventControlConfigEditor.vue';
+import de from './i18n/de.js';
+import en from './i18n/en.js';
 
-enum EventType {
-  Layer = 'layer',
-  Map = 'map',
-  Module = 'module',
-  Planning = 'planning',
-  Window = 'window',
-}
+export type { Action, EventControlConfig } from './types.js';
+export { EventType } from './types.js';
 
-type Action = {
-  type: EventType;
-  targetName: string;
-  onActivate?: Array<VcsCallbackOptions>;
-  onDeactivate?: Array<VcsCallbackOptions>;
-};
-type EventControlConfig = { actions?: Array<Action> };
-type EventControlState = Record<never, never>;
+type EventControlState = Record<string, never>;
 
 function handleMapStateChange(
   vcsUiApp: VcsUiApp,
@@ -34,10 +22,10 @@ function handleMapStateChange(
   return map.stateChanged.addEventListener((state) => {
     actions.forEach((action) => {
       if (action.onActivate?.length && state === MapState.ACTIVE) {
-        executeCallbacks(vcsUiApp, action.onActivate);
+        safeExecuteCallbacks(vcsUiApp, action.onActivate);
       }
       if (action.onDeactivate?.length && state === MapState.INACTIVE) {
-        executeCallbacks(vcsUiApp, action.onDeactivate);
+        safeExecuteCallbacks(vcsUiApp, action.onDeactivate);
       }
     });
   });
@@ -71,12 +59,12 @@ export default function eventControl(config: EventControlConfig): EventControl {
                   layer.state === LayerState.ACTIVE &&
                   action.onActivate?.length
                 ) {
-                  executeCallbacks(vcsUiApp, action.onActivate);
+                  safeExecuteCallbacks(vcsUiApp, action.onActivate);
                 } else if (
                   layer.state === LayerState.INACTIVE &&
                   action.onDeactivate?.length
                 ) {
-                  executeCallbacks(vcsUiApp, action.onDeactivate);
+                  safeExecuteCallbacks(vcsUiApp, action.onDeactivate);
                 }
               });
           }),
@@ -126,7 +114,7 @@ export default function eventControl(config: EventControlConfig): EventControl {
                   a.onActivate?.length,
               )
               .forEach((action) => {
-                executeCallbacks(vcsUiApp, action.onActivate!);
+                safeExecuteCallbacks(vcsUiApp, action.onActivate!);
               });
           }),
           vcsUiApp.moduleRemoved.addEventListener((mod) => {
@@ -139,7 +127,7 @@ export default function eventControl(config: EventControlConfig): EventControl {
                   a.onDeactivate?.length,
               )
               .forEach((action) => {
-                executeCallbacks(vcsUiApp, action.onDeactivate!);
+                safeExecuteCallbacks(vcsUiApp, action.onDeactivate!);
               });
           }),
         );
@@ -155,7 +143,7 @@ export default function eventControl(config: EventControlConfig): EventControl {
               activateWindowsActions
                 .filter((a) => a.targetName === window.id)
                 ?.forEach((a) => {
-                  executeCallbacks(vcsUiApp, a.onActivate!);
+                  safeExecuteCallbacks(vcsUiApp, a.onActivate!);
                 });
             }),
           );
@@ -169,7 +157,7 @@ export default function eventControl(config: EventControlConfig): EventControl {
               deactivateWindowsActions
                 .filter((a) => a.targetName === window.id)
                 ?.forEach((a) => {
-                  executeCallbacks(vcsUiApp, a.onDeactivate!);
+                  safeExecuteCallbacks(vcsUiApp, a.onDeactivate!);
                 });
             }),
           );
@@ -182,9 +170,15 @@ export default function eventControl(config: EventControlConfig): EventControl {
     toJSON(): EventControlConfig {
       return config;
     },
-    getConfigEditors(): PluginConfigEditor<object>[] {
-      return [];
+    getConfigEditors(): PluginConfigEditor<EventControlConfig>[] {
+      return [
+        {
+          component: EventControlConfigEditor,
+          title: 'eventControl.editor.title',
+        },
+      ];
     },
+    i18n: { de, en },
     destroy(): void {
       listeners.forEach((l) => {
         l?.();

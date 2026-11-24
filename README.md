@@ -25,6 +25,8 @@ Plugin configuration is simple: the `actions` property is an array of actions, d
 
 For more information about callbacks, see the [Callback documentation](https://github.com/virtualcitySYSTEMS/map-ui/blob/main/documentation/CALLBACKS.md).
 
+The actions can also be configured in the App Configurator using the plugin's config editor. Common callbacks (e.g. `ActivateLayersCallback`, `ToggleNavbarButtonCallback`, `AddModuleCallback`) have dedicated forms; any other callback, such as those registered by plugins, can be edited as JSON.
+
 #### Configuration examples
 
 - I want to toggle the state of `layer2` at the same time as that of `layer1`:

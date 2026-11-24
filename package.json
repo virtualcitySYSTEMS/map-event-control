@@ -1,6 +1,6 @@
 {
   "name": "@vcmap/event-control",
-  "version": "1.0.1",
+  "version": "1.1.0-rc.0",
   "description": "",
   "type": "module",
   "main": "dist/index.js",
@@ -40,10 +40,10 @@
   },
   "prettier": "@vcsuite/eslint-config/prettier.js",
   "peerDependencies": {
-    "@vcmap-cesium/engine": "^11.0.2",
-    "@vcmap/core": "^6.1.8",
-    "@vcmap/ui": "^6.1.10",
-    "ol": "^10.5.0",
+    "@vcmap-cesium/engine": "^11.0.5",
+    "@vcmap/core": "^6.3.13",
+    "@vcmap/ui": "^6.3.15",
+    "ol": "^10.11.0",
     "vue": "~3.4.38",
     "vuetify": "~3.7.14"
   },
@@ -51,15 +51,19 @@
     "esbuild": "^0.25.0"
   },
   "devDependencies": {
-    "@vcmap/plugin-cli": "^4.1.0",
+    "@vcmap/plugin-cli": "^4.2.0",
     "@vcsuite/eslint-config": "^4.0.0",
-    "@vitest/coverage-v8": "^2.1.9",
+    "@vitest/coverage-v8": "^4.1.12",
     "jest-canvas-mock": "^2.5.2",
     "jsdom": "^26.1.0",
     "resize-observer-polyfill": "^1.5.1",
-    "typescript": "^5.8.3",
-    "vitest": "^2.1.9",
-    "vue-tsc": "^2.2.10"
+    "typescript": "^5.9.3",
+    "vite-plugin-vuetify": "~2.0.4",
+    "vitest": "^4.1.12",
+    "vue-tsc": "^2.2.12"
   },
-  "mapVersion": "^6.1"
+  "dependencies": {
+    "@vcsuite/logger": "^1.0.1"
+  },
+  "mapVersion": "^6.3"
 }
